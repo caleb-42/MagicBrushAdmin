@@ -1,6 +1,7 @@
 var tester;
 var json;
 
+
 $(document).ready(function() {
 
     $("#dataToggler").click(function(e) {
@@ -20,6 +21,23 @@ $(document).ready(function() {
     });
 
     $("body").on("click", function(e) {
+        //var b = $('.inpmFro').val();
+        //transfervalue();
+        if($(e.target).attr('class') == "modal fade"){
+            $("#updDiv input").val("");
+        }
+        //console.log($(e.target).attr('class'));
+    });
+
+    $("#closeCreateCustomer").on("click", function(e) {
+        //var b = $('.inpmFro').val();
+        //transfervalue();
+        if($(e.target).attr('class') == "modal fade"){
+            $("#createDiv input").val("");
+        }
+        //console.log($(e.target).attr('class'));
+    });
+    $("#closeUpdCustomer").on("click", function(e) {
         //var b = $('.inpmFro').val();
         //transfervalue();
         if($(e.target).attr('class') == "modal fade"){
@@ -91,7 +109,8 @@ function moreless(){
 
 function showCandidates(){
     //console.log("hw");
-    $.get("/MagicBrushAdmin/scripts/php/regTable.php", function(response) {
+    //$.get("/MagicBrushAdmin/scripts/php/regTable.php", function(response) {
+    $.get("/webplay/MagicBrushAdmin/scripts/php/regTable.php", function(response) {
         /*$("#gifCon").addClass("invisible hidden");
         $("#error").removeClass("hidden");
         $("#btnContactUs").attr('disabled',false);
@@ -101,30 +120,29 @@ function showCandidates(){
             var obj;
 
         }*/
-        console.log(response);
+        //console.log(response);
 
-        /*json = JSON.parse(response);
+        json = JSON.parse(response);
         var str = "";
         for(var a = 0; a < json.length; a++){
             str += '<tr id="tablerow' + a + '" class = "trow"><td style="text-align: center;" class="tdel">' + json[a].id + '</td><td class="tdel">' + json[a].name + '</td><td style="text-align: center;" class="tdel">' + json[a].age + '</td><td style="text-align: center;" class="tdel">' + json[a].gender + '</td><td style="text-align: center;" class="tdel">' + json[a].state + '</td><td class="tdel">' + json[a].zone + '</td><td class="tdel">' + json[a].email + '</td><td class="tdel">' + json[a].mobile + '</td><td style="text-align: center;" class="tdel">' + json[a].status + '</td><td class="tdel">' + json[a].regdate + '</td><td style="text-align: center;" class="tdel"><button type="button" onclick = "toggleModal($(this));" class="btn btn-primary btn-sm editCand" value="' + a + '" data-toggle = "modal" data-target = "#updCand"><i class="fa fa-edit"></i>Edit</button></td><td><div style="text-align: center;"><input type="checkbox" name="candCheck" class="candCheck" value="' + a + '"> <span class="glyphicon glyphicon-check"></span></div></td></tr>'
         }
-        /*<td><div style="text-align: center;"><input type="checkbox" name="candCheck" class="candCheck" value="1"> <span class="glyphicon glyphicon-check"></span></div></td>
+        /*<td><div style="text-align: center;"><input type="checkbox" name="candCheck" class="candCheck" value="1"> <span class="glyphicon glyphicon-check"></span></div></td>*/
         $('#candidates').append(str);
-        console.log(json);*/
+        console.log(json);
     });
 }
 
-function updateCandInf(valu){
-    var formdata = $("#reused_form").serialize();
-    var val_id = "val_id";
-    formdata += "&val_id=" + valu;
+function CreateCandInf(){
+    var formdata = $("#create_form").serialize();
    /* console.log(formdata);*/
-    $("#btnUpd").css("visibility", "hidden");
-    $("#loadgif").css("visibility", "visible");
-    $('#error').css("display", "inline");
-    $.post("/MagicBrushAdmin/scripts/php/updCand.php",formdata, function(response) {
+    $("#btnCreate").css("visibility", "hidden");
+    $("#createloadgif").css("visibility", "visible");
+    $('#createerror').css("display", "inline");
+    //$.post("/MagicBrushAdmin/scripts/php/updCand.php",formdata, function(response) {
+    $.post("/webplay/MagicBrushAdmin/scripts/php/createCand.php",formdata, function(response) {
 
-        $("#loadgif").css("visibility", "hidden");
+        $("#createloadgif").css("visibility", "hidden");
         var output;
         console.log(response);
         if (response.substring(2, 7) == "error") {
@@ -138,27 +156,79 @@ function updateCandInf(valu){
                 output = jsonn[1] + " " + obj;
                 /*$("input[name=" + json[1] + "]")*/
             }
-            $('#error').css("color", "#DD2A2A");
-            $('#error').text(output).fadeTo('slow', 1).delay(2000)
+            $('#createerror').css("color", "#DD2A2A");
+            $('#createerror').text(output).fadeTo('slow', 1).delay(2000)
+                .fadeTo('slow', 0, function(){$("#btnCreate").css("visibility", "visible"); $('#createerror').css("display", "none");});
+        }else if (response.substring(2, 7) == "uperr") {
+            var jsonn = JSON.parse(response);
+            output = jsonn[1];
+            $('#createerror').css("color", "#DD2A2A");
+            $('#createerror').text(output).fadeTo('slow', 1).delay(2000)
+                .fadeTo('slow', 0, function(){$("#btnCreate").css("visibility", "visible"); $('#createerror').css("display", "none");});
+        }else if (response.substring(2, 7) == "updat") {
+            var jsonn = JSON.parse(response);
+            output = jsonn[1];
+            $('#createerror').css("color", "#25a249");
+            $('#createerror').text(output).fadeTo('slow', 1).delay(2000)
+                .fadeTo('slow', 0, function(){$("#btnCreate").css("visibility", "visible");$('#createerror').css("display", "none");});
+            $("#candidates").empty();
+            showCandidates();
+        }else{
+            output = "something went wrong";
+            $('#createerror').css("color", "#DD2A2A");
+            $('#createerror').text(output).fadeTo('slow', 1).delay(2000)
+                .fadeTo('slow', 0, function(){$("#btnCreate").css("visibility", "visible");$('#createerror').css("display", "none");});
+        }
+
+    });
+}
+
+function updateCandInf(valu){
+    var formdata = $("#reused_form").serialize();
+    var val_id = "val_id";
+    formdata += "&val_id=" + valu;
+   /* console.log(formdata);*/
+    $("#btnUpd").css("visibility", "hidden");
+    $("#updloadgif").css("visibility", "visible");
+    $('#upderror').css("display", "inline");
+    //$.post("/MagicBrushAdmin/scripts/php/updCand.php",formdata, function(response) {
+    $.post("/webplay/MagicBrushAdmin/scripts/php/updCand.php",formdata, function(response) {
+
+        $("#updloadgif").css("visibility", "hidden");
+        var output;
+        console.log(response);
+        if (response.substring(2, 7) == "error") {
+            var jsonn = JSON.parse(response);
+            var obj;
+            if(jsonn[3] == "first"){
+                obj = $("input[name=" + jsonn[1] + "]").prev("label").text();
+                output = obj + " " + jsonn[2];
+            }else{
+                obj = $("input[name=" + jsonn[2] + "]").prev("label").text();
+                output = jsonn[1] + " " + obj;
+                /*$("input[name=" + json[1] + "]")*/
+            }
+            $('#upderror').css("color", "#DD2A2A");
+            $('#upderror').text(output).fadeTo('slow', 1).delay(2000)
                 .fadeTo('slow', 0, function(){$("#btnUpd").css("visibility", "visible"); $('#error').css("display", "none");});
         }else if (response.substring(2, 7) == "uperr") {
             var jsonn = JSON.parse(response);
             output = jsonn[1];
-            $('#error').css("color", "#DD2A2A");
-            $('#error').text(output).fadeTo('slow', 1).delay(2000)
+            $('#upderror').css("color", "#DD2A2A");
+            $('#upderror').text(output).fadeTo('slow', 1).delay(2000)
                 .fadeTo('slow', 0, function(){$("#btnUpd").css("visibility", "visible"); $('#error').css("display", "none");});
         }else if (response.substring(2, 7) == "updat") {
             var jsonn = JSON.parse(response);
             output = jsonn[1];
-            $('#error').css("color", "#25a249");
-            $('#error').text(output).fadeTo('slow', 1).delay(2000)
+            $('#upderror').css("color", "#25a249");
+            $('#upderror').text(output).fadeTo('slow', 1).delay(2000)
                 .fadeTo('slow', 0, function(){$("#btnUpd").css("visibility", "visible");$('#error').css("display", "none");});
             $("#candidates").empty();
             showCandidates();
         }else{
             output = "something went wrong";
-            $('#error').css("color", "#DD2A2A");
-            $('#error').text(output).fadeTo('slow', 1).delay(2000)
+            $('#upderror').css("color", "#DD2A2A");
+            $('#upderror').text(output).fadeTo('slow', 1).delay(2000)
                 .fadeTo('slow', 0, function(){$("#btnUpd").css("visibility", "visible");$('#error').css("display", "none");});
         }
 

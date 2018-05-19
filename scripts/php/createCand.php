@@ -11,10 +11,10 @@ function __autoload($class_name){
 /*...............error checking................*/
 if(is_ajax_request()){
     errorCheker($arr);
-    updateReg($newarr);
+    createReg($newarr);
 }
 
-function updateReg($data){
+function createReg($data){
     global $arr;
     $read = array();
     //print_r($data);
@@ -25,18 +25,17 @@ function updateReg($data){
             array_push($col, substr($data[$num], 8- strlen($data[$num])));
             array_push($val, $arr[$data[$num]]);
         }
-        $read = DbHandler::update_cmd(['table' => 'magic_users',
-                                       'col' => $col,
-                                       'join' => ['AND'],
-                                       'val' => $val,
-                                       'wherecol' => ['id'],
-                                       'whereval' => [$arr["val_id"]]]);
+        $read = DbHandler::insert_cmd([
+            'table' => 'magic_users',
+            'col' => $col,
+            'val' => $val
+        ]);
 
     }
-
+    //echo json_encode($read);
     if($read){
         if($read == 1){
-            $assoc = array('0' => 'updat', '1' => 'Updated');
+            $assoc = array('0' => 'updat', '1' => 'Created');
             echo json_encode($assoc);
             exit;
         }else{
@@ -72,7 +71,7 @@ function errorCheker($array){
 
             if(!empty($value)){
                 $num = test_input($value);
-                if(!preg_match("/^[0-9]*$/", $num)){
+                if(!preg_match("/^[1-9][0-9]*$/", $num)){
                     $assoc = array('0' => 'error', '1' => 'Only numbers are allowed in', '2' =>$key, '3'=>'last');
                     echo json_encode($assoc);
                     exit;

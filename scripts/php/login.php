@@ -46,7 +46,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             $found_user = $result_set[0];
             $_SESSION['user_id'] = $found_user['user_id'];
             $_SESSION['username'] = $found_user['user'];
-            custom_redirect_to("http://webplayglobal.co.uk/MagicBrushAdmin/index.php");
+            //custom_redirect_to("http://webplayglobal.co.uk/MagicBrushAdmin/index.php");
+            custom_redirect_to("http://localhost/webplay/MagicBrushAdmin/index.php");
             exit();
         }else{
             print_r($result_set[0]);

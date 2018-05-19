@@ -111,11 +111,81 @@
         </div>
     </div>
 
-    <div class="modal fade" id="createCand" role="dialog">
+    <div class="modal fade" id="createCand" role="dialog" >
+        <div class="modal-dialog modal-lg">
 
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title ml-3">Create Candidate</h5>
+                    <button type="button" class="close" id="closeCreateCustomer" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body nopadding">
+
+                    <form role="form" method="post" id="create_form">
+                        <div class="row mx-3 editrow">
+                            <div class="col-sm-6" id="createDiv">
+                                <div class="padd">
+                                    <label class="text-primary inputtext">Name</label>
+                                    <input type="text" name="namecreaname" class="form-control input-sm inputadjust">
+                                </div>
+                                <div class="padd">
+                                    <label class="text-primary inputtext">Age</label>
+                                    <input type="text" name="numbcreaage" class="form-control input-sm inputadjust">
+                                </div>
+                                <div class="padd">
+                                    <label class="text-primary inputtext">Gender</label>
+                                    <input type="text" name="gendcreagender" class="form-control input-sm inputadjust">
+                                </div>
+                                <div class="padd">
+                                    <label class="text-primary inputtext">State</label>
+                                    <input type="text" name="namecreastate" class="form-control input-sm inputadjust">
+                                </div>
+                                <div class="padd">
+                                    <label class="text-primary inputtext">Zone</label>
+                                    <input type="text" name="namecreazone" class="form-control input-sm inputadjust">
+                                </div>
+                            </div>
+                            <div class="col-sm-6" id="createDiv">
+                                <div class="padd">
+                                    <label class="text-primary inputtext">Email</label>
+                                    <input type="text" name="mailcreaemail" class="form-control input-sm inputadjust">
+                                </div>
+                                <!--<div class="rest less">-->
+                                <div class="padd">
+                                    <label class="text-primary inputtext">Mobile</label>
+                                    <input type="text" name="numbcreamobile" class="form-control input-sm inputadjust">
+                                </div>
+                                <div class="padd">
+                                    <label class="text-primary inputtext">Status</label>
+                                    <input type="text" name="stuscreastatus" class="form-control input-sm inputadjust">
+                                </div>
+                                <div class="padd">
+                                    <label class="text-primary inputtext">Registration Date</label>
+                                    <input type="text" name="datecreadate" class="form-control input-sm inputadjust">
+                                </div>
+                            </div>
+                            <!--</div>-->
+                        </div>
+                    </form>
+                    <div class="modal-footer pull-left w-100">
+                        <div class="row justify-content-center w-100 d-flex flex-column">
+                            <div class="my-1 align-self-center">
+
+                                <img id="createloadgif" src="assets/magicload.gif" width="90px" height="60px" class="ml-2" style="position:absolute !important; visibility:hidden;">
+                                <button type="button" class="btn bgcolor_bg " onclick="CreateCandInf();" id="btnCreate">
+                                    <img src = "assets/create.png" width = "100px" height="30px">
+                                </button>
+                            </div>
+                            <p id = "createerror" class="align-self-center" style="font-size:15px;position:absolute !important;  text-align:center;font-weight: 600; opacity:0;"></p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="modal fade" id="updCand" role="dialog">
+    <div class="modal fade" id="updCand" role="dialog" >
         <div class="modal-dialog modal-lg">
 
             <div class="modal-content">
@@ -133,7 +203,7 @@
                         </div>
                     </div>
                     <form role="form" method="post" id="reused_form">
-                        <div class="row mx-3" id="editrow">
+                        <div class="row mx-3 editrow">
                             <div class="col-sm-6">
                                 <div class="padd">
                                     <label class="text-primary inputtext">Name</label>
@@ -213,7 +283,6 @@
                                     <input type="text" name="datecanddate" class="form-control input-sm inputadjust">
                                 </div>
                             </div>
-                            <!--</div>-->
                         </div>
                     </form>
                     <div class="modal-footer pull-left w-100">
@@ -224,12 +293,12 @@
                             </div>-->
                             <div class="my-1 align-self-center">
 
-                                <img id="loadgif" src="assets/magicload.gif" width="90px" height="60px" class="ml-2" style="position:absolute !important; visibility:hidden;">
+                                <img id="updloadgif" src="assets/magicload.gif" width="90px" height="60px" class="ml-2" style="position:absolute !important; visibility:hidden;">
                                 <button type="button" class="btn bgcolor_bg " onclick="updateCandInf(this.value);" id="btnUpd" value="" >
                                     <img src = "assets/update.png" width = "100px" height="30px">
                                 </button>
                             </div>
-                            <p id="error" class=" align-self-center" style="font-size:15px;position:absolute !important;  text-align:center;font-weight: 600; opacity:0;"></p>
+                            <p id = "upderror" class="align-self-center" style="font-size:15px;position:absolute !important;  text-align:center;font-weight: 600; opacity:0;"></p>
 
                         </div>
                     </div>

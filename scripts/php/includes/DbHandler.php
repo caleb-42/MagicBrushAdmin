@@ -1,12 +1,12 @@
 <?php
 class DbHandler{
     const HOST = "localhost";
-    const DB = "webplayg_mgxdb";
+    /*const DB = "webplayg_mgxdb";
     const USER = "webplayg_root";
-    const PASS = "webplay";
-    /*const DB = "mgxdb";
+    const PASS = "webplay";*/
+    const DB = "mgxdb";
     const USER = "root";
-    const PASS = "";*/
+    const PASS = "ewere";
     public static $con;
 
     /*if(mysqli_num_rows($result) > 0){*/
@@ -172,7 +172,7 @@ class DbHandler{
                     }
                     $query .= ");";
                         //echo $query;
-                        return DbHandler::runQuery($con,$query);
+                    return DbHandler::runInputQuery($con,$query);
                     }else{
 
                     }
@@ -192,10 +192,7 @@ class DbHandler{
             }
             if(!$con) {
                 $assoc = array('0' => 'error', '1' => 'connection unsuccessful');
-                echo json_encode ($assoc);
-            }
-            else{
-                //echo "connection successful";
+                return $assoc;
             }
 
 
@@ -203,7 +200,7 @@ class DbHandler{
                 $query = "INSERT INTO {$data['table']} ";
             }else{
                 $assoc = array('0' => 'error', '1' => 'no table has been entered');
-                echo json_encode ($assoc);
+                return $assoc;
             }
             if(array_key_exists('col', $data) && array_key_exists('val', $data)){
 
@@ -218,15 +215,22 @@ class DbHandler{
                     }else{
                         $query.= "(". $data['col'][0] . ") VALUES ('" . $data['val'][0] . "');";
                     }
-
-                        //return DbHandler::runQuery($con,$query);
-                }else if($data['col'] == 'default' && is_array($data['val'])){
+                    //$assoc = array('0' => 'output', '1' => $query);
+                    return DbHandler::runInputQuery($con,$query);
+                    //return $assoc;
+                }else if(count($data['col']) == 1 && is_array($data['col'])  && $data['col'][0] == 'default' && is_array($data['val'])){
                     $query.= " VALUES ('" . implode("', '", $data['val']) . "');";
+                    //$assoc = array('0' => 'output', '1' => $query);
+                    return DbHandler::runInputQuery($con,$query);
+                    //return $assoc;
+                }else{
+                    $assoc = array('0' => 'error', '1' => 'col or val parameters either have wrong datatype or values ');
+                    return $assoc;
                 }
-                echo $query;
+
             }else{
-                $assoc = array('0' => 'error', '1' => 'no values have been entered');
-                echo json_encode ($assoc);
+                $assoc = array('0' => 'error', '1' => 'database col  parameter is missing or no values have been entered');
+                return $assoc;
             }
         }
     }
@@ -234,10 +238,19 @@ class DbHandler{
     static function runQuery($con, $query, $table){
         $result_set = mysqli_query($con, $query);
         if($result_set){
-
             return DbHandler::getArray($result_set,$con,$table);
         }else{
-            return "query failed within connection";
+            $assoc = array('0' => 'error', '1' => 'query failed within connection');
+            return $assoc;
+        }
+    }
+    static function runInputQuery($con, $query){
+        $result_set = mysqli_query($con, $query);
+        if($result_set){
+            return $result_set;
+        }else{
+            $assoc = array('0' => 'error', '1' => 'query failed within connection');
+            return $assoc;
         }
     }
 
